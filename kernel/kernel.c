@@ -82,14 +82,47 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
+
+void* memcpy(void *destination, const void *source, size_t len)
+{
+	// a naive memory copy
+	unsigned char *dst_ptr = (unsigned char *)destination;
+	const unsigned char *src_ptr = (const unsigned char *)source;
+	for (size_t i = 0; i < len; i++)
+	{
+		dst_ptr[i] = src_ptr[i];
+	}
+	return destination;
+}
+
+void* memset(void *destination, int value, size_t len)
+{
+	// a naive memset()
+	unsigned char *dst_ptr = (unsigned char *)destination;
+	for (size_t i = 0; i < len; i++)
+	{
+		dst_ptr[i] = (unsigned char) value;
+	}
+	return destination;
+}
  
+void terminal_scroll_up()
+{
+	memcpy(terminal_buffer, terminal_buffer + VGA_WIDTH, VGA_WIDTH * (VGA_HEIGHT - 1) * sizeof(uint16_t));
+	char blank_line = vga_entry(' ', VGA_COLOR_BLACK);
+	for (size_t i = 0; i < VGA_WIDTH; i++) {
+		terminal_putentryat(blank_line, terminal_color, i, terminal_row - 1);
+	}
+	terminal_row--;
+}
+
 void terminal_putchar(char c) 
 {
 	if (c == '\n') {
 		terminal_column = 0;
 
 		if (++terminal_row == VGA_HEIGHT) {
-			// TODO: copy the goods. Byte-by-byte memcpy().
+			terminal_scroll_up();
 		}
 
 		return;
@@ -99,10 +132,10 @@ void terminal_putchar(char c)
 	if (++terminal_column == VGA_WIDTH) {
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+			terminal_scroll_up();
 	}
 }
- 
+
 void terminal_write(const char* data, size_t size) 
 {
 	for (size_t i = 0; i < size; i++)
@@ -119,7 +152,33 @@ void kernel_main(void)
 	/* Initialize terminal interface */
 	terminal_initialize();
  
-	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\n");
-	terminal_writestring("Here is another string");
+	/* Testing this VGA stuff */
+	terminal_writestring("Chubawamba!\n");
+	terminal_writestring("Chubawamba 2!\n");
+	terminal_writestring("Chubawamba 3!\n");
+	terminal_writestring("Chubawamba 4!\n");
+	terminal_writestring("Chubawamba 5!\n");
+	terminal_writestring("Chubawamba 6!\n");
+	terminal_writestring("Chubawamba 7!\n");
+	terminal_writestring("Chubawamba 8!\n");
+	terminal_writestring("Chubawamba 9!\n");
+	terminal_writestring("Chubawamba 10!\n");
+	terminal_writestring("Chubawamba 11!\n");
+	terminal_writestring("Chubawamba 12!\n");
+	terminal_writestring("Chubawamba 13!\n");
+	terminal_writestring("Chubawamba 14!\n");
+	terminal_writestring("Chubawamba 15!\n");
+	terminal_writestring("Chubawamba 16!\n");
+	terminal_writestring("Chubawamba 17!\n");
+	terminal_writestring("Chubawamba 18!\n");
+	terminal_writestring("Chubawamba 19!\n");
+	terminal_writestring("Chubawamba 20!\n");
+	terminal_writestring("Chubawamba 21!\n");
+	terminal_writestring("Chubawamba 22!\n");
+	terminal_writestring("Chubawamba 23!\n");
+	terminal_writestring("Chubawamba 24!\n");
+	terminal_writestring("Chubawamba 25!\n");
+	terminal_writestring("Chubawamba 26!\n");
+	terminal_writestring("Chubawamba 27!\n");
+	terminal_writestring("aaaa");
 }
