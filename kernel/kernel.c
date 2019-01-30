@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
  
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -41,15 +42,7 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
 	return (uint16_t) uc | (uint16_t) color << 8;
 }
- 
-size_t strlen(const char* str) 
-{
-	size_t len = 0;
-	while (str[len])
-		len++;
-	return len;
-}
- 
+
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
  
@@ -81,29 +74,6 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
-}
-
-void* memcpy(void *destination, const void *source, size_t len)
-{
-	// a naive memory copy
-	unsigned char *dst_ptr = (unsigned char *)destination;
-	const unsigned char *src_ptr = (const unsigned char *)source;
-	for (size_t i = 0; i < len; i++)
-	{
-		dst_ptr[i] = src_ptr[i];
-	}
-	return destination;
-}
-
-void* memset(void *destination, int value, size_t len)
-{
-	// a naive memset()
-	unsigned char *dst_ptr = (unsigned char *)destination;
-	for (size_t i = 0; i < len; i++)
-	{
-		dst_ptr[i] = (unsigned char) value;
-	}
-	return destination;
 }
  
 void terminal_scroll_up()
