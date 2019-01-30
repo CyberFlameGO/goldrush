@@ -5,6 +5,9 @@ development. The over-arching goal is a POSIX-like operating system that
 can self-host itself (that is, you can build Goldrush under itself instead
 of having to cross-compile binaries from another host platform).
 
+There's no particular reason why I chose the name Goldrush. No need to wildly
+speculate.
+
 Goldrush is an educational project I am developing primarily to learn the art,
 bringing together learning about low-level hardware details with learning the
 fundamentals of computer science. My own interests will likely lead to a focus
