@@ -23,6 +23,9 @@ stack_top:
 .section .text
 .global _start
 .type _start, @function
+
+# The Multiboot loader will transfer control to _start once the file is loaded
+# and the environment set up.
 _start:
 	movl $stack_top, %esp
 
@@ -32,8 +35,14 @@ _start:
 	# Transfer control to the arch-specific kernel entry.
 	call kernel_arch_start
 
-	# Hang if kernel_arch_start unexpectedly returns.
+	# Hang if kernel_arch_start unexpectedly returns.=
+	jmp _goldrush_arch_halt
+
+.size _start, . - _start
+
+.global _goldrush_arch_halt
+.type _goldrush_arch_halt, @function
+_goldrush_arch_halt:
 	cli
 1:	hlt
 	jmp 1b
-.size _start, . - _start

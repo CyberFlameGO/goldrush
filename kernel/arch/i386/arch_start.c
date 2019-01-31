@@ -30,5 +30,5 @@ void kernel_arch_start()
     // We shouldn't exit from our eventual kernel_main(), nor should
     // we exit from kernel_arch_start() itself. (We're doing so because
     // very little actual functionality has been written.)
-    printf("Returned from kernel_main\n");
+    panic("Returned from kernel_main()\n");
 }

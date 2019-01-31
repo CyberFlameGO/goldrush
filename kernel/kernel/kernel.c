@@ -1,7 +1,9 @@
+/**
+ * The primary entry point for the Goldrush kernel.
+ */
 #include <stdio.h>
 
-#include <kernel/tty.h>
-
-void kernel_main(void) {
+void kernel_main()
+{
 	printf("Hello from kernel_main()\n");
 }
