@@ -1,18 +1,7 @@
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
- 
-/* Check if the compiler thinks you are targeting the wrong operating system. */
-#if defined(__linux__)
-#error "You are not using a cross-compiler, you will most certainly run into trouble"
-#endif
- 
-/* This tutorial will only work for the 32-bit ix86 targets. */
-#if !defined(__i386__)
-#error "This tutorial needs to be compiled with a ix86-elf compiler"
-#endif
- 
+
 /* Hardware text mode color constants. */
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -115,40 +104,4 @@ void terminal_write(const char* data, size_t size)
 void terminal_writestring(const char* data) 
 {
 	terminal_write(data, strlen(data));
-}
- 
-void kernel_main(void) 
-{
-	/* Initialize terminal interface */
-	terminal_initialize();
- 
-	/* Testing this VGA stuff */
-	terminal_writestring("Chubawamba!\n");
-	terminal_writestring("Chubawamba 2!\n");
-	terminal_writestring("Chubawamba 3!\n");
-	terminal_writestring("Chubawamba 4!\n");
-	terminal_writestring("Chubawamba 5!\n");
-	terminal_writestring("Chubawamba 6!\n");
-	terminal_writestring("Chubawamba 7!\n");
-	terminal_writestring("Chubawamba 8!\n");
-	terminal_writestring("Chubawamba 9!\n");
-	terminal_writestring("Chubawamba 10!\n");
-	terminal_writestring("Chubawamba 11!\n");
-	terminal_writestring("Chubawamba 12!\n");
-	terminal_writestring("Chubawamba 13!\n");
-	terminal_writestring("Chubawamba 14!\n");
-	terminal_writestring("Chubawamba 15!\n");
-	terminal_writestring("Chubawamba 16!\n");
-	terminal_writestring("Chubawamba 17!\n");
-	terminal_writestring("Chubawamba 18!\n");
-	terminal_writestring("Chubawamba 19!\n");
-	terminal_writestring("Chubawamba 20!\n");
-	terminal_writestring("Chubawamba 21!\n");
-	terminal_writestring("Chubawamba 22!\n");
-	terminal_writestring("Chubawamba 23!\n");
-	terminal_writestring("Chubawamba 24!\n");
-	terminal_writestring("Chubawamba 25!\n");
-	terminal_writestring("Chubawamba 26!\n");
-	terminal_writestring("Chubawamba 27!\n");
-	terminal_writestring("aaaa");
 }

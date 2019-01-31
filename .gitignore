@@ -1,2 +1,5 @@
+sysroot/
+*.a
+*.d
 *.o
-*.bin
+kernel/goldrush
