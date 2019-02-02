@@ -12,4 +12,4 @@ menuentry "Goldrush" {
 	multiboot /boot/goldrush
 }
 EOF
-grub-mkrescue -o myos.iso isodir
+grub-mkrescue -o goldrush.iso isodir

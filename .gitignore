@@ -3,3 +3,4 @@ sysroot/
 *.d
 *.o
 kernel/goldrush
+isodir/
