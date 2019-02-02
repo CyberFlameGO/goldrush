@@ -10,6 +10,8 @@ extern "C" {
 __attribute__((__noreturn__))
 void abort(void);
 
+char *itoa(int val, char *buf, int base);
+
 #ifdef __cplusplus
 }
 #endif

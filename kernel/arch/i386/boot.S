@@ -27,9 +27,15 @@ stack_top:
 # The Multiboot loader will transfer control to _start once the file is loaded
 # and the environment set up.
 _start:
+	# Capture the Multiboot boot information in ebx.
 	movl $stack_top, %esp
 
-	# Call the global constructors.
+	# Call the early start C logic.
+	push %ebx # has the multiboot magic
+	push %eax # has a pointer to the multiboot boot information struct
+	call kernel_arch_early_start
+
+	# Call all constructors.
 	call _init
 
 	# Transfer control to the arch-specific kernel entry.
