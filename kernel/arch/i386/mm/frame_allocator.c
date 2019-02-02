@@ -52,8 +52,10 @@ void *allocate_page()
 {
     page_node_t *curr = first_node;
     
+    // Iterate the linked list of physical memory regions available.
     while (curr != NULL)
     {
+        // Iterate through the bitmap of pages allocated or free.
         for (size_t bitmap_index = 0; bitmap_index < (curr->pages_avail / sizeof(uint32_t)) - 1; bitmap_index++)
         {
             uint32_t word = curr->bitmap[bitmap_index];
@@ -61,7 +63,7 @@ void *allocate_page()
             {
                 if ((word & (1 << word_index)) == 0)
                 {
-                    // Allocate this word
+                    // We found a free page. Allocate it to the user.
                     curr->bitmap[bitmap_index] = word | (1 << word_index);
                     return ((unsigned char *) curr->base + ((bitmap_index + 1) * word_index * 4096));
                 }
@@ -72,4 +74,28 @@ void *allocate_page()
     }
 
     return NULL;
+}
+
+void free_page(void *addr)
+{
+    uint32_t addr_int = (uint32_t) addr;
+    page_node_t *curr = first_node;
+
+    // Iterate the linked list of physical memory regions available.
+    while (curr != NULL)
+    {
+        size_t page_index = (addr_int - curr->base) >> 12;
+        if (page_index > curr->pages_avail)
+        {
+            // The page is almost certainly not in this boundary. Try the next
+            // space.
+            curr = curr->next;
+            continue;
+        }
+
+        uint32_t bitmap_index = page_index >> 5;
+        uint32_t and_word = ~(1 << (page_index % 8));
+        curr->bitmap[bitmap_index] &= and_word;
+        break;
+    }
 }

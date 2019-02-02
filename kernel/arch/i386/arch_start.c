@@ -55,6 +55,7 @@ void kernel_arch_early_start(uint32_t magic, uint32_t multiboot_info_ptr)
 
     printf("page 1: 0x%x\n", allocate_page());
     printf("page 2: 0x%x\n", allocate_page());
+    free_page(allocate_page());
 }
 
 void kernel_arch_start()
