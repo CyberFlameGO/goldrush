@@ -17,7 +17,7 @@ static int _int_log10(int n)
 	int result = 0;
 	do {
 		result++;
-	} while (result /= 10);
+	} while (n /= 10);
 	return result;
 }
 
@@ -81,6 +81,8 @@ int printf(const char* restrict format, ...) {
 		} else if (*format == 'd') {
 			format++;
 			int i = va_arg(parameters, int);
+			// note: potential_size is a guess as to the buffer size - always
+			// find the string size afterwards
 			int potential_size = _int_log10(i) + 1;
 			if (maxrem < potential_size) {
 				// TODO: Set errno to EOVERFLOW.
@@ -88,7 +90,20 @@ int printf(const char* restrict format, ...) {
 			}
 			char str[potential_size];
 			itoa(i, str, 10);
-			if (!print(str, potential_size))
+			if (!print(str, strlen(str)))
+				return -1;
+			written += potential_size;
+		} else if (*format == 'x') {
+			format++;
+			int i = va_arg(parameters, int);
+			int potential_size = (_int_log10(i) * 5 / 4);
+			if (maxrem < potential_size) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			char str[potential_size];
+			itoa(i, str, 16);
+			if (!print(str, strlen(str)))
 				return -1;
 			written += potential_size;
 		} else {

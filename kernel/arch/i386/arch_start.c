@@ -1,4 +1,4 @@
-/**0x2BADB002
+/**
  * The primary C entrypoint of the Goldrush kernel is known as kernel_arch_start.
  * 
  * On i386, Goldrush is a Multiboot 0.6.96-compliant kernel, and by the time that
@@ -28,6 +28,7 @@ void kernel_arch_early_start(uint32_t magic, uint32_t multiboot_info_ptr)
 
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
+        printf("magic %x doesn't match multiboot 0.6.96 magic %x\n", magic, MULTIBOOT_BOOTLOADER_MAGIC);
         panic("not booted with a multiboot-compliant boot loader");
     }
 
