@@ -40,4 +40,7 @@ SECTIONS
 
 	/* The compiler may produce other sections, put them in the proper place in
 	   in this file, if you'd like to include them in the final kernel. */
+	
+	/* End of the kernel symbols. Used for initializing memory management in early init. */
+	early_page_alloc_start = ALIGN(., 4K);
 }

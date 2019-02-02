@@ -17,6 +17,7 @@
 #include <kernel/kernel.h>
 #include <kernel/tty.h>
 
+#include "mm/frame_allocator.h"
 #include "multiboot.h"
 
 static multiboot_info_t *multiboot_info;
@@ -36,6 +37,24 @@ void kernel_arch_early_start(uint32_t magic, uint32_t multiboot_info_ptr)
     }
 
     multiboot_info = (multiboot_info_t*) multiboot_info_ptr;
+
+    // The very first thing we've got to do is initialize the memory manager so
+    // that we'll be able to do all sorts of fun stuff. Here's how we do it:
+    //
+    // 1. Parse the memory tables passed to us from the multiboot loader. If there
+    //    is no table, we will panic.
+    // 2. Use those memory tables to initialize the page frame allocator. We can now
+    //    allocate our first few physical pages of memory.
+    // 3. Set up an initial page table (initially just identity-mapping) allocated
+    //    by the physical page allocator, and activate it. Paging is now active.
+    // 4. Set up and activate the GDT, TSS, and IDT. We now approach something close
+    //    to a normal protected mode environment.
+    // 5. Initialize the kernel's heap manager. We can now dynamically allocate objects,
+    //    which will give our kernel form.
+    initialize_page_alloc_stage1();
+
+    printf("page 1: 0x%x\n", allocate_page());
+    printf("page 2: 0x%x\n", allocate_page());
 }
 
 void kernel_arch_start()
@@ -60,7 +79,6 @@ void kernel_arch_start()
             if (mmap->type == MULTIBOOT_MEMORY_AVAILABLE) {
                 available_pages += mmap->len_low >> 12;
             }
-            printf("  skip %d\n", mmap->size);
             mmap = (multiboot_memory_map_t*) ((unsigned long) mmap + mmap->size + sizeof(mmap->size));
         }
         printf("We have %d pages to work with\n", available_pages);
