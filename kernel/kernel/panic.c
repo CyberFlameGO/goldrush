@@ -7,10 +7,13 @@
  * Tells the user to reboot the system and dumps diagnostic information
  * that may assist in debugging.
  */
+__attribute__((noreturn))
 void panic(const char *msg)
 {
     printf("[PANIC] %s", msg);
 
     // Halt the system.
     _goldrush_arch_halt();
+
+    __builtin_unreachable();
 }

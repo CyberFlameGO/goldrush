@@ -7,6 +7,7 @@
  * _goldrush_arch_halt() is called by the panic() function if the system enters
  * an unrecoverable state. The system will be halted.
  */
+__attribute__((noreturn))
 void _goldrush_arch_halt();
 
 #endif
